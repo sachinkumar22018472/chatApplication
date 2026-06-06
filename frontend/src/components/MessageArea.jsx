@@ -140,6 +140,7 @@ function MessageArea() {
                   />
                 )
             ))}
+            console.log(mess.image)
 
           </div>
 

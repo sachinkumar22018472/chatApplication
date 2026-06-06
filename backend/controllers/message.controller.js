@@ -11,13 +11,15 @@ export const sendMessage = async (req, res) => {
         let { message } = req.body
 
         let image;
-
         if (req.file) {
 
-            const uploadedImage = await uploadOnCloudinary(req.file.path)
+            console.log("FILE:", req.file);
 
-            image = uploadedImage.secure_url
+            const uploadedImage = await uploadOnCloudinary(req.file.path);
 
+            console.log("CLOUDINARY RESPONSE:", uploadedImage);
+
+            image = uploadedImage;
         }
 
         let conversation = await Conversation.findOne({
@@ -49,13 +51,12 @@ export const sendMessage = async (req, res) => {
         return res.status(201).json(newMessage)
 
     } catch (error) {
+    console.log("SEND MESSAGE ERROR:", error);
 
-        return res.status(500).json({
-            message: `send Message error ${error}`
-        })
-
-    }
-
+    return res.status(500).json({
+        message: `send Message error ${error.message}`
+    });
+}
 }
 
 export const getMessages = async (req, res) => {
