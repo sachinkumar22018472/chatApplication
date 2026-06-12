@@ -60,31 +60,31 @@ export const sendMessage = async (req, res) => {
 }
 
 export const getMessages = async (req, res) => {
+    console.log("GET MESSAGE CONTROLLER HIT");
 
     try {
 
-        let sender = req.userId
-        let { receiver } = req.params
+        const sender = req.userId;
+        const { receiver } = req.params;
 
-        let conversation = await Conversation.findOne({
+        const conversation = await Conversation.findOne({
             participants: { $all: [sender, receiver] }
-        }).populate("messages")
+        }).populate("messages");
 
+        // Conversation nahi mila to empty array bhejo
         if (!conversation) {
-
-            return res.status(400).json({
-                message: "conversation not found"
-            })
-
+            return res.status(200).json([]);
         }
 
-        return res.status(200).json(conversation.messages)
+        return res.status(200).json(conversation.messages);
 
     } catch (error) {
 
+        console.log("GET MESSAGE ERROR:", error);
+
         return res.status(500).json({
-            message: `get Message error ${error}`
-        })
+            message: `get Message error ${error.message}`
+        });
 
     }
 

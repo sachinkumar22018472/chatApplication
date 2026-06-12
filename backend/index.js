@@ -6,12 +6,13 @@ import userRouter from './routes/user.routes.js'
 import cookieParser from 'cookie-parser'
 import cors from "cors"
 import messageRouter from './routes/message.routes.js'
+import { app, server } from './socket/socket.js'
 
 dotenv.config()
 
 const port = process.env.PORT || 5000
 
-const app = express()
+
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -33,7 +34,7 @@ app.use("/api/message", messageRouter)
 
 
 // server
-app.listen(port, () => {
+server.listen(port, () => {
     connectDb()
     console.log(`server started on port ${port}`)
 })

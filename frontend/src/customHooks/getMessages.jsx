@@ -28,11 +28,10 @@ const useGetMessages = () => {
                 dispatch(setMessages(result.data))
 
             } catch (error) {
-
-                console.log(error)
-
-            }
-
+    console.log("STATUS:", error.response?.status);
+    console.log("DATA:", error.response?.data);
+    console.log("FULL ERROR:", error);
+}
         }
 
         fetchMessages()

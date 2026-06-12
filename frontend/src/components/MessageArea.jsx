@@ -140,7 +140,7 @@ function MessageArea() {
                   />
                 )
             ))}
-            console.log(mess.image)
+
 
           </div>
 
@@ -171,8 +171,12 @@ function MessageArea() {
 
             {/* Input Form */}
 
-            <img src={frontendImage} alt=" " className='w-20 absolute bottom-25 right-[10%] rounded-lg shadow-gray-400 shadow-lg' />
-
+            <img
+              src={frontendImage || undefined}
+              alt="preview"
+              className={`w-20 absolute bottom-25 right-[10%] rounded-lg shadow-gray-400 shadow-lg ${!frontendImage ? "hidden" : ""
+                }`}
+            />
             <form
               action=""
               className='w-full bg-sky-600 shadow-lg shadow-gray-400 flex items-center px-3 gap-2 h-14 rounded-full'
@@ -261,3 +265,6 @@ function MessageArea() {
 }
 
 export default MessageArea
+
+
+

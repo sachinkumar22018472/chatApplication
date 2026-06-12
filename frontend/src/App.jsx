@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Login from './pages/Login'
@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux'
 import Home from './pages/Home'
 import Profile from './pages/Profile'
 import getOtherUsers from './customHooks/getOtherUsers'
+import {io} from "socket.io-client"
+import { serverUrl } from './main'
 
 function App() {
 
@@ -15,6 +17,24 @@ function App() {
   getOtherUsers()
 
   let { userData } = useSelector(state => state.user)
+
+useEffect(() => {
+
+  if (!userData?._id) return;
+
+  const socket = io(serverUrl, {
+    query: {
+      userId: userData._id
+    }
+  });
+
+  socket.on("connect", () => {
+    console.log("Connected:", socket.id);
+  });
+
+  return () => socket.disconnect();
+
+}, [userData]);
 
   return (
     <Routes>

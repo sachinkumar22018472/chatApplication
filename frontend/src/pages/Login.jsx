@@ -3,7 +3,7 @@ import { data, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import { serverUrl } from '../main'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUserData } from '../redux/userSlice'
+import { setSelectedUser, setUserData } from '../redux/userSlice'
 
 function Login() {
 
@@ -38,6 +38,7 @@ function Login() {
       )
 
       dispatch(setUserData(result.data))
+      dispatch(setSelectedUser(null))
 
       alert("Login Successful")
 
