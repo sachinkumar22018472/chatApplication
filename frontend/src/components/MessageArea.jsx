@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoMdArrowRoundBack } from "react-icons/io"
 import dp from "../assets/dp.webp"
 import { RiEmojiStickerLine } from "react-icons/ri"
@@ -6,6 +6,7 @@ import { FaImages } from "react-icons/fa6"
 import { IoSendSharp } from "react-icons/io5"
 import { useDispatch, useSelector } from 'react-redux'
 import EmojiPicker from 'emoji-picker-react'
+import { addMessage } from "../redux/messageSlice";
 
 import { setSelectedUser } from '../redux/userSlice'
 
@@ -15,9 +16,10 @@ import axios from 'axios'
 import { serverUrl } from '../main'
 import { useRef } from 'react'
 
+
 function MessageArea() {
 
-  const { selectedUser, userData } = useSelector(state => state.user)
+  const { selectedUser, userData, socket } = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
@@ -38,34 +40,45 @@ function MessageArea() {
   }
 
   const handleSendMessage = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    if (message.length === 0 && !backendImage) {
+      return;
+    }
 
     try {
 
-      let formData = new FormData()
+      if (!message.trim() && !backendImage) return;
 
-      formData.append("message", message)
+      let formData = new FormData();
+
+      formData.append("message", message);
 
       if (backendImage) {
-        formData.append("image", backendImage)
+        formData.append("image", backendImage);
       }
 
       const result = await axios.post(
         `${serverUrl}/api/message/send/${selectedUser._id}`,
         formData,
         { withCredentials: true }
-      )
+      );
 
-      console.log(result.data)
+      // Sender side par turant message dikhao
+      dispatch(addMessage(result.data));
 
-      setMessage("")
-      setFrontedImage(null)
-      setBackendImage(null)
+      setMessage("");
+      setFrontedImage(null);
+      setBackendImage(null);
+
+      // File input reset
+      if (image.current) {
+        image.current.value = "";
+      }
 
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   // Emoji Select Function
   const onEmojiClick = (emojiData) => {
@@ -74,7 +87,19 @@ function MessageArea() {
 
   }
 
+  useEffect(() => {
 
+    if (!socket) return;
+
+    socket.on("newMessage", (mess) => {
+      dispatch(addMessage(mess));
+    });
+
+    return () => {
+      socket.off("newMessage");
+    };
+
+  }, [socket, dispatch]);
 
   return (
 
@@ -124,7 +149,7 @@ function MessageArea() {
           <div className='flex-1 overflow-y-auto p-5 flex flex-col gap-4 pb-24'>
 
             {messages && messages.map((mess) => (
-              mess.sender === userData._id
+              String(mess.sender) === String(userData._id)
                 ? (
                   <SenderMessage
                     key={mess._id}
@@ -154,7 +179,7 @@ function MessageArea() {
             {/* Emoji Picker */}
             {showPicker && (
 
-              <div className='absolute bottom-16 left-0 z-50'>
+              <div className='absolute bottom-16 left-0 z-80'>
 
                 <EmojiPicker
                   width={300}
@@ -225,11 +250,12 @@ function MessageArea() {
               </div>
 
               {/* Send Button */}
-              <button >
+              {(message.length > 0 || backendImage) && (
+                <button type="submit">
+                  <IoSendSharp className='w-5 h-5 text-white cursor-pointer' />
+                </button>
+              )}
 
-                <IoSendSharp className='w-5 h-5 text-white cursor-pointer' />
-
-              </button>
 
             </form>
 

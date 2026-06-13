@@ -15,16 +15,35 @@ const io = new Server(server, {
   },
 });
 
-io.on("connection", (socket) => {  
+ const userSocketMap = {};
 
-    const userId = socket.handshake.query.userId
+ export const getReceiverSocketId = (receiver) => {
+  return userSocketMap[receiver]
+ }
 
-    if(userId != undefined) {
-        console.log(userId)
-    }
+io.on("connection", (socket) => {
+
+  const userId = socket.handshake.query.userId;
+
+  console.log("User Connected:", userId);
+  console.log("Socket ID:", socket.id);
+
+  if (userId) {
+    userSocketMap[userId] = socket.id;
+  }
+
+  // Sabko online users bhejo
+  io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
   socket.on("disconnect", () => {
-    
+
+    console.log("User Disconnected:", userId);
+
+    if (userId) {
+      delete userSocketMap[userId];
+    }
+
+    io.emit("getOnlineUsers", Object.keys(userSocketMap));
   });
 });
 
