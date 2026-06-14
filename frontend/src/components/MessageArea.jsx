@@ -30,6 +30,7 @@ function MessageArea() {
   const [backendImage, setBackendImage] = useState(null)
 
   let image = useRef()
+  let messagesEndRef = useRef(null)
 
   let { messages } = useSelector(state => state.message)
 
@@ -101,6 +102,12 @@ function MessageArea() {
 
   }, [socket, dispatch]);
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth"
+    });
+  }, [messages]);
+
   return (
 
     <div
@@ -155,6 +162,7 @@ function MessageArea() {
                     key={mess._id}
                     image={mess.image}
                     message={mess.message}
+                    userImage={userData.image}
                   />
                 )
                 : (
@@ -162,9 +170,11 @@ function MessageArea() {
                     key={mess._id}
                     image={mess.image}
                     message={mess.message}
+                    userImage={selectedUser.image}
                   />
                 )
             ))}
+            <div ref={messagesEndRef}></div>
 
 
           </div>

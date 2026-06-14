@@ -1,22 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react'
+import dp from "../assets/dp.webp"
 
-function ReceiverMessage({ image, message }) {
+function ReceiverMessage({ image, message, userImage }) {
 
-  let scroll = useRef()
+  const scroll = useRef()
+
   useEffect(() => {
-
-    scroll?.current.scrollIntoView({ behavior: "smooth" })
+    scroll.current?.scrollIntoView({
+      behavior: "smooth"
+    })
   }, [message, image])
 
   const [imageError, setImageError] = useState(false)
 
   const handleImageScroll = () => {
-    scroll?.current.scrollIntoView({ behavior: "smooth" })
+    scroll.current?.scrollIntoView({
+      behavior: "smooth"
+    })
   }
 
   return (
-    <div className='w-fit max-w-125 px-5 py-2.5 bg-blue-200 text-white rounded-tl-none rounded-2xl relative left-0 shadow-gray-400 shadow-lg gap-2.5 flex flex-col' >
-      <div ref={scroll}>
+
+    <div
+      ref={scroll}
+      className='flex items-end gap-2 w-fit'
+    >
+
+      {/* Receiver Profile Image */}
+      <img
+        src={userImage || dp}
+        alt="profile"
+        className='w-10 h-10 rounded-full object-cover flex-shrink-0'
+      />
+
+      {/* Message Bubble */}
+      <div className='max-w-[300px] px-5 py-2.5 bg-blue-200 text-black rounded-tl-none rounded-2xl shadow-gray-400 shadow-lg flex flex-col gap-2'>
 
         {image && !imageError && (
           <img
@@ -32,9 +50,11 @@ function ReceiverMessage({ image, message }) {
         )}
 
         {message && <span>{message}</span>}
+
       </div>
 
     </div>
+
   )
 }
 
