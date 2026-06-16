@@ -7,7 +7,7 @@ import App from './App.jsx'
 import { store } from './redux/store.js'
 
 
-export const serverUrl="http://localhost:8000"
+export const serverUrl="https://chatapplication-backend-d5sz.onrender.com"
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
