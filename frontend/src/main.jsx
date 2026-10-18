@@ -5,7 +5,7 @@ import { Provider } from "react-redux"
 export const serverUrl = import.meta.env.VITE_BACKEND_URL || 
   (typeof window !== "undefined" && window.location.hostname === "localhost"
     ? "http://localhost:8000"
-    : "https://chatapplication-backend-d5sz.onrender.com")
+    : "https://chatapplication-vnry.onrender.com")
 
 import './index.css'
 import App from './App.jsx'

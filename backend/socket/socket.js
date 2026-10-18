@@ -13,7 +13,7 @@ const io = new Server(server, {
     origin: (origin, callback) => {
       const allowed = [
         "http://localhost:5173",
-        "https://chatapplication-96ig.onrender.com",
+        "https://chatapplication-vnry.onrender.com",
         "https://chat-application-woad-five.vercel.app"
       ];
       if (!origin || allowed.includes(origin) || origin.endsWith(".vercel.app")) {

@@ -17,7 +17,7 @@
   A full-stack, responsive real-time chat application featuring instant bidirectional messaging, live online presence, media sharing with Cloudinary & local fallback, user search, profile customization, and secure cookie-based JWT authentication.
 </p>
 
-[🚀 Live Demo](https://chat-application-woad-five.vercel.app/) • [⚡ Backend API](https://chatapplication-backend-d5sz.onrender.com) • [Report Bug](https://github.com/sachinkumar22018472/chatApplication/issues) • [Request Feature](https://github.com/sachinkumar22018472/chatApplication/issues)
+[🚀 Live Demo](https://chat-application-woad-five.vercel.app/) • [⚡ Backend API](https://chatapplication-vnry.onrender.com) • [Report Bug](https://github.com/sachinkumar22018472/chatApplication/issues) • [Request Feature](https://github.com/sachinkumar22018472/chatApplication/issues)
 
 </div>
 
@@ -28,7 +28,7 @@
 | Component | Platform | Live URL |
 | :--- | :--- | :--- |
 | **Frontend** | **Vercel** | [https://chat-application-woad-five.vercel.app](https://chat-application-woad-five.vercel.app) |
-| **Backend API** | **Render** | [https://chatapplication-backend-d5sz.onrender.com](https://chatapplication-backend-d5sz.onrender.com) |
+| **Backend API** | **Render** | [https://chatapplication-vnry.onrender.com](https://chatapplication-vnry.onrender.com) |
 
 ---
 
