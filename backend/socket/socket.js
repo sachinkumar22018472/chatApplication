@@ -38,8 +38,9 @@ io.on("connection", (socket) => {
 
   
 
-  if (userId) {
+  if (userId && userId !== "undefined") {
     userSocketMap[userId] = socket.id;
+    socket.join(String(userId));
   }
 
   // Sabko online users bhejo

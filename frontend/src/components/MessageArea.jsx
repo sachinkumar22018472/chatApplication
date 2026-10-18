@@ -95,7 +95,11 @@ function MessageArea() {
     if (!socket) return;
 
     const handleNewMessage = (mess) => {
-      if (selectedUser && (mess.sender === selectedUser._id || mess.receiver === selectedUser._id)) {
+      const senderId = String(mess?.sender?._id || mess?.sender || "");
+      const receiverId = String(mess?.receiver?._id || mess?.receiver || "");
+      const currentSelectedId = String(selectedUser?._id || "");
+
+      if (selectedUser && (senderId === currentSelectedId || receiverId === currentSelectedId)) {
         dispatch(addMessage(mess));
       }
     };

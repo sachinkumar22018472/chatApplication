@@ -21,12 +21,13 @@ function App() {
   let dispatch = useDispatch()
 useEffect(() => {
 
-  if (userData) {
+  if (userData?._id) {
 
     const socketio = io(serverUrl, {
       query: {
         userId: userData._id
-      }
+      },
+      transports: ["websocket", "polling"]
     });
 
     dispatch(setSocket(socketio));
@@ -51,7 +52,7 @@ useEffect(() => {
     }
   }
 
-}, [userData]);
+}, [userData?._id]);
 
   return (
     <Routes>

@@ -15,7 +15,12 @@ const messageSlice = createSlice({
       if (!Array.isArray(state.messages)) {
         state.messages = [];
       }
-      if (action.payload && !state.messages.some(m => m._id === action.payload._id)) {
+      if (
+        action.payload &&
+        !state.messages.some(
+          m => String(m._id) === String(action.payload._id)
+        )
+      ) {
         state.messages.push(action.payload);
       }
     }
