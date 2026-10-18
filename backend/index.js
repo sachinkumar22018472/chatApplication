@@ -20,12 +20,13 @@ const port = process.env.PORT || 5000
 
 const allowedOrigins = [
     "http://localhost:5173",
-    "https://chatapplication-96ig.onrender.com"
+    "https://chatapplication-96ig.onrender.com",
+    "https://chat-application-woad-five.vercel.app"
 ]
 
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
             callback(null, true)
         } else {
             callback(new Error("Not allowed by CORS"))
