@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import dp from "../assets/dp.webp"
+import { getProfileImage, handleImageError } from "../utils/imageHelper"
 
 function ReceiverMessage({ image, message, userImage }) {
 
@@ -28,9 +29,10 @@ function ReceiverMessage({ image, message, userImage }) {
 
       {/* Receiver Profile Image */}
       <img
-        src={userImage || dp}
+        src={getProfileImage(userImage)}
         alt="profile"
         className='w-10 h-10 rounded-full object-cover flex-shrink-0'
+        onError={handleImageError}
       />
 
       {/* Message Bubble */}

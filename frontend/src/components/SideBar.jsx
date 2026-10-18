@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import dp from "../assets/dp.webp"
+import { getProfileImage, handleImageError } from "../utils/imageHelper"
 import { IoSearch } from "react-icons/io5"
 import { RxCross2 } from "react-icons/rx"
 import { BiLogOutCircle } from "react-icons/bi"
@@ -94,9 +95,10 @@ function SideBar() {
                     >
 
                         <img
-                            src={userData?.image || dp}
+                            src={getProfileImage(userData?.image)}
                             alt="profile"
                             className='w-full h-full object-cover'
+                            onError={handleImageError}
                         />
 
                     </div>
@@ -149,9 +151,10 @@ function SideBar() {
                                         onClick={() => dispatch(setSelectedUser(user))}
                                     >
                                         <img
-                                            src={user.image || dp}
+                                            src={getProfileImage(user.image)}
                                             alt="profile"
                                             className='w-full h-full object-cover'
+                                            onError={handleImageError}
                                         />
 
                                     </div>
@@ -177,9 +180,10 @@ function SideBar() {
 
                         <div className='relative w-14 h-14'>
                             <img
-                                src={user.image || dp}
+                                src={getProfileImage(user.image)}
                                 alt="profile"
                                 className='w-full h-full rounded-full object-cover shadow-md'
+                                onError={handleImageError}
                             />
 
                             {onlineUsers?.includes(user._id) && (

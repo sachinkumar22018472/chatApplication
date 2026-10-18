@@ -1,5 +1,6 @@
 import React from 'react'
 import dp from "../assets/dp.webp"
+import { getProfileImage, handleImageError } from "../utils/imageHelper";
 import { MdOutlineCameraAlt } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +24,7 @@ function Profile() {
     React.useEffect(() => {
         if (userData) {
             setName(userData.name || "")
-            setFrontendImage(userData.image || dp)
+            setFrontendImage(getProfileImage(userData.image))
         }
     }, [userData])
 
@@ -74,9 +75,10 @@ function Profile() {
 
         <div className='w-50 h-50 overflow-hidden rounded-full flex justify-center items-center'>
           <img
-            src={frontendImage}
+            src={frontendImage || dp}
             alt="profile"
             className='h-full w-full object-cover'
+            onError={handleImageError}
           />
         </div>
 

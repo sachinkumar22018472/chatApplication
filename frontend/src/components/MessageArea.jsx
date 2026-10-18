@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IoMdArrowRoundBack } from "react-icons/io"
 import dp from "../assets/dp.webp"
+import { getProfileImage, handleImageError } from "../utils/imageHelper"
 import { RiEmojiStickerLine } from "react-icons/ri"
 import { FaImages } from "react-icons/fa6"
 import { IoSendSharp } from "react-icons/io5"
@@ -143,9 +144,10 @@ function MessageArea() {
             <div className='w-12 h-12 rounded-full overflow-hidden shadow-md'>
 
               <img
-                src={selectedUser?.image || dp}
+                src={getProfileImage(selectedUser?.image)}
                 alt="profile"
                 className='w-full h-full object-cover'
+                onError={handleImageError}
               />
 
             </div>

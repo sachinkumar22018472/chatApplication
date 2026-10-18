@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import dp from "../assets/dp.webp";
+import { getProfileImage, handleImageError } from "../utils/imageHelper";
 
 function SenderMessage({ image, message, userImage }) {
   const scroll = useRef(null);
@@ -34,9 +35,10 @@ function SenderMessage({ image, message, userImage }) {
 
       {/* Profile Image */}
       <img
-        src={userImage || dp}
+        src={getProfileImage(userImage)}
         alt="profile"
         className="w-10 h-10 rounded-full object-cover"
+        onError={handleImageError}
       />
     </div>
   );
