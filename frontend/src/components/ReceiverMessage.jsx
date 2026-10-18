@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import dp from "../assets/dp.webp"
-import { getProfileImage, handleImageError } from "../utils/imageHelper"
+import { getProfileImage, getMessageImage, handleImageError } from "../utils/imageHelper"
 
 function ReceiverMessage({ image, message, userImage }) {
 
@@ -40,10 +40,11 @@ function ReceiverMessage({ image, message, userImage }) {
 
         {image && !imageError && (
           <img
-            src={image}
+            src={getMessageImage(image)}
             alt="message"
-            className='w-40 rounded-lg'
+            className='w-48 max-h-60 rounded-lg object-cover cursor-pointer'
             onLoad={handleImageScroll}
+            onClick={() => window.open(getMessageImage(image), '_blank')}
             onError={() => {
               console.log("Receiver Image Failed:", image)
               setImageError(true)

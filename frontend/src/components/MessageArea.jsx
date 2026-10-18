@@ -44,20 +44,27 @@ function MessageArea() {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (message.length === 0 && !backendImage) {
+    if (!message.trim() && !backendImage) {
       return;
     }
 
+    const currentMsg = message;
+    const currentBackendImage = backendImage;
+
+    // Immediately reset input for snappy, responsive feel
+    setMessage("");
+    setFrontedImage(null);
+    setBackendImage(null);
+    if (image.current) {
+      image.current.value = "";
+    }
+
     try {
-
-      if (!message.trim() && !backendImage) return;
-
       let formData = new FormData();
+      formData.append("message", currentMsg);
 
-      formData.append("message", message);
-
-      if (backendImage) {
-        formData.append("image", backendImage);
+      if (currentBackendImage) {
+        formData.append("image", currentBackendImage);
       }
 
       const result = await axios.post(
@@ -66,20 +73,12 @@ function MessageArea() {
         { withCredentials: true }
       );
 
-      // Sender side par turant message dikhao
+      // Sender side par message dikhao
       dispatch(addMessage(result.data));
-
-      setMessage("");
-      setFrontedImage(null);
-      setBackendImage(null);
-
-      // File input reset
-      if (image.current) {
-        image.current.value = "";
-      }
 
     } catch (error) {
       console.log(error);
+      setMessage(currentMsg);
       alert(error?.response?.data?.message || "Failed to send message");
     }
   };

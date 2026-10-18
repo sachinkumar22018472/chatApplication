@@ -9,7 +9,7 @@ const uploadOnCloudinary = async (filePath) => {
   const apiKey = process.env.API_KEY?.replace(/['"]/g, "").trim();
   const apiSecret = process.env.API_SECRET?.replace(/['"]/g, "").trim();
 
-  // Try Cloudinary if credentials are provided
+  // Try Cloudinary with a 5 second timeout so chat never hangs
   if (cloudName && apiKey && apiSecret) {
     try {
       cloudinary.config({
@@ -18,28 +18,36 @@ const uploadOnCloudinary = async (filePath) => {
         api_secret: apiSecret,
       });
 
-      const uploadResult = await cloudinary.uploader.upload(filePath, {
+      const uploadPromise = cloudinary.uploader.upload(filePath, {
         resource_type: "auto",
       });
 
-      // Cleanup local temp file after successful Cloudinary upload
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Cloudinary timeout")), 5000)
+      );
 
-      return uploadResult.secure_url;
+      const uploadResult = await Promise.race([uploadPromise, timeoutPromise]);
+
+      if (uploadResult?.secure_url) {
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+        return uploadResult.secure_url;
+      }
     } catch (error) {
-      console.error("Cloudinary upload failed (e.g. disabled key or missing permissions):", error?.message || error);
-      console.warn("Falling back to local server storage for uploaded file.");
+      console.warn("Cloudinary upload failed or timed out:", error?.message || error);
     }
   }
 
-  // Fallback: Serve the uploaded file from the local server
+  // Fallback: Serve the uploaded file from the server
   try {
     if (fs.existsSync(filePath)) {
       const fileName = path.basename(filePath);
       const port = process.env.PORT || 8000;
-      const baseUrl = process.env.BASE_URL || `http://localhost:${port}`;
+      const baseUrl =
+        process.env.BASE_URL ||
+        process.env.RENDER_EXTERNAL_URL ||
+        "https://chatapplication-vnry.onrender.com";
       return `${baseUrl}/public/${fileName}`;
     }
   } catch (localErr) {

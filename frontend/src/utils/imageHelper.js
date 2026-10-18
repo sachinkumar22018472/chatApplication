@@ -3,8 +3,16 @@ import { serverUrl } from "../main"
 
 export const getProfileImage = (img) => {
   if (!img) return dp
-  if (typeof img === "string" && (img.startsWith("http://localhost:8000") || img.startsWith("http://localhost:5000"))) {
-    return img.replace(/^http:\/\/localhost:\d+/, serverUrl)
+  if (typeof img === "string" && (img.startsWith("http://localhost:") || img.startsWith("http://localhost"))) {
+    return img.replace(/^http:\/\/localhost(:\d+)?/, serverUrl)
+  }
+  return img
+}
+
+export const getMessageImage = (img) => {
+  if (!img) return null
+  if (typeof img === "string" && (img.startsWith("http://localhost:") || img.startsWith("http://localhost"))) {
+    return img.replace(/^http:\/\/localhost(:\d+)?/, serverUrl)
   }
   return img
 }
