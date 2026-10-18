@@ -25,25 +25,29 @@ export const getCurrentUser = async (req, res) => {
 
 export const editProfile = async (req, res) => {
     try {
-        let {name} = req.body
-        let image;
-        if(req.file) {
-            image= await uploadOnCloudinary(req.file.path)
+        let { name } = req.body
+        let updateData = {}
+        if (name) updateData.name = name
+
+        if (req.file) {
+            const uploadedImage = await uploadOnCloudinary(req.file.path)
+            if (!uploadedImage) {
+                return res.status(500).json({
+                    message: "Image upload failed. Please try again."
+                })
+            }
+            updateData.image = uploadedImage
         }
 
-        let user = await User.findByIdAndUpdate(req.userId, {
-            name,
-            image,
+        let user = await User.findByIdAndUpdate(req.userId, updateData, { new: true }).select("-password")
 
-        }, {new: true})
-
-        if(!user) {
-            return res.status(400).json({message: "user does not found"})
+        if (!user) {
+            return res.status(400).json({ message: "user does not found" })
         }
 
         return res.status(200).json(user)
     } catch (error) {
-        return res.status(500).json({message: `profile error ${error}`})
+        return res.status(500).json({ message: `profile error ${error.message || error}` })
     }
 }
 

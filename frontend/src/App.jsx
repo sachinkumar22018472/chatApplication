@@ -57,23 +57,33 @@ useEffect(() => {
     <Routes>
 
       <Route
+        path='/'
+        element={<Navigate to={userData ? "/home" : "/login"} replace />}
+      />
+
+      <Route
         path='/login'
-        element={!userData ? <Login /> : <Navigate to="/home" />}
+        element={!userData ? <Login /> : <Navigate to="/home" replace />}
       />
 
       <Route
         path='/signup'
-        element={!userData ? <SignUp /> : <Navigate to="/profile" />}
+        element={!userData ? <SignUp /> : <Navigate to="/profile" replace />}
       />
 
       <Route
         path='/home'
-        element={userData ? <Home /> : <Navigate to="/login" />}
+        element={userData ? <Home /> : <Navigate to="/login" replace />}
       />
 
       <Route
         path='/profile'
-        element={userData ? <Profile /> : <Navigate to="/signup" />}
+        element={userData ? <Profile /> : <Navigate to="/login" replace />}
+      />
+
+      <Route
+        path='*'
+        element={<Navigate to={userData ? "/home" : "/login"} replace />}
       />
 
     </Routes>

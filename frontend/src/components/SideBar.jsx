@@ -142,10 +142,9 @@ function SideBar() {
                             ?.filter((user) => onlineUsers?.includes(user._id))
                             .slice(0, 5)
                             .map((user) => (
-                                <div className='relative rounded-full shadow-gray-500 bg-white shadow-lg'>
+                                <div key={user._id} className='relative rounded-full shadow-gray-500 bg-white shadow-lg'>
 
                                     <div
-                                        key={user._id}
                                         className='w-14 h-14 shrink-0 rounded-full overflow-hidden bg-white shadow-lg shadow-gray-500 cursor-pointer relative'
                                         onClick={() => dispatch(setSelectedUser(user))}
                                     >

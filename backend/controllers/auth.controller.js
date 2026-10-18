@@ -39,7 +39,10 @@ export const signUp = async (req, res) => {
             secure: true
         })
 
-        return res.status(201).json(user)
+        const userObj = user.toObject ? user.toObject() : user
+        delete userObj.password
+
+        return res.status(201).json(userObj)
 
     } catch (error) {
         return res.status(500).json({message: `signup error ${error}`})
@@ -76,14 +79,14 @@ export const login = async (req, res) => {
         res.cookie("token", token, {
             httpOnly: true,
             maxAge: 7 * 24 * 60 * 60 * 1000,
-           sameSite: "None",
+            sameSite: "None",
             secure: true
         })
 
-        return res.status(200).json({
-            message: "login successful",
-            user
-        })
+        const userObj = user.toObject ? user.toObject() : user
+        delete userObj.password
+
+        return res.status(200).json(userObj)
 
     } catch (error) {
         return res.status(500).json({
@@ -94,7 +97,11 @@ export const login = async (req, res) => {
 
 export const logOut = async (req, res) => {
     try {
-        res.clearCookie("token")
+        res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "None",
+            secure: true
+        })
         return res.status(200).json({message: "logout successfully"})
     } catch (error) {
         return res.status(500).json({message: `logout error ${error}`})

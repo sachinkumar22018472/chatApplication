@@ -15,7 +15,7 @@ function SignUp() {
   const [password, setPassword] = useState("")
   const [loading, setLoading]= useState(false)
   const [err, setErr]= useState("")
-  const dispatch = useDispatch("")
+  const dispatch = useDispatch()
  
 
 

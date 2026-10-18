@@ -12,12 +12,17 @@ export const sendMessage = async (req, res) => {
 
         let image;
         if (req.file) {
-
             console.log("FILE:", req.file);
 
             const uploadedImage = await uploadOnCloudinary(req.file.path);
 
-            console.log("CLOUDINARY RESPONSE:", uploadedImage);
+            console.log("IMAGE UPLOAD RESULT:", uploadedImage);
+
+            if (!uploadedImage) {
+                return res.status(500).json({
+                    message: "Image upload failed. Please try again."
+                });
+            }
 
             image = uploadedImage;
         }

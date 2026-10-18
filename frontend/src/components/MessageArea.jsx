@@ -4,6 +4,7 @@ import dp from "../assets/dp.webp"
 import { RiEmojiStickerLine } from "react-icons/ri"
 import { FaImages } from "react-icons/fa6"
 import { IoSendSharp } from "react-icons/io5"
+import { RxCross2 } from "react-icons/rx"
 import { useDispatch, useSelector } from 'react-redux'
 import EmojiPicker from 'emoji-picker-react'
 import { addMessage } from "../redux/messageSlice";
@@ -78,6 +79,7 @@ function MessageArea() {
 
     } catch (error) {
       console.log(error);
+      alert(error?.response?.data?.message || "Failed to send message");
     }
   };
 
@@ -92,15 +94,19 @@ function MessageArea() {
 
     if (!socket) return;
 
-    socket.on("newMessage", (mess) => {
-      dispatch(addMessage(mess));
-    });
-
-    return () => {
-      socket.off("newMessage");
+    const handleNewMessage = (mess) => {
+      if (selectedUser && (mess.sender === selectedUser._id || mess.receiver === selectedUser._id)) {
+        dispatch(addMessage(mess));
+      }
     };
 
-  }, [socket, dispatch]);
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+
+  }, [socket, dispatch, selectedUser]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({
@@ -156,13 +162,13 @@ function MessageArea() {
           <div className='flex-1 overflow-y-auto p-5 flex flex-col gap-4 pb-24'>
 
             {messages && messages.map((mess) => (
-              String(mess.sender) === String(userData._id)
+              String(mess.sender) === String(userData?._id)
                 ? (
                   <SenderMessage
                     key={mess._id}
                     image={mess.image}
                     message={mess.message}
-                    userImage={userData.image}
+                    userImage={userData?.image}
                   />
                 )
                 : (
@@ -170,7 +176,7 @@ function MessageArea() {
                     key={mess._id}
                     image={mess.image}
                     message={mess.message}
-                    userImage={selectedUser.image}
+                    userImage={selectedUser?.image}
                   />
                 )
             ))}
@@ -204,14 +210,27 @@ function MessageArea() {
 
 
 
-            {/* Input Form */}
-
-            <img
-              src={frontendImage || undefined}
-              alt="preview"
-              className={`w-20 absolute bottom-25 right-[10%] rounded-lg shadow-gray-400 shadow-lg ${!frontendImage ? "hidden" : ""
-                }`}
-            />
+            {/* Image Preview with Remove Button */}
+            {frontendImage && (
+              <div className='absolute bottom-20 right-[10%] z-20'>
+                <img
+                  src={frontendImage}
+                  alt="preview"
+                  className='w-20 h-20 object-cover rounded-lg shadow-gray-400 shadow-lg border-2 border-white'
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFrontedImage(null);
+                    setBackendImage(null);
+                    if (image.current) image.current.value = "";
+                  }}
+                  className='absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 cursor-pointer'
+                >
+                  <RxCross2 className='w-3 h-3' />
+                </button>
+              </div>
+            )}
             <form
               action=""
               className='w-full bg-sky-600 shadow-lg shadow-gray-400 flex items-center px-3 gap-2 h-14 rounded-full'

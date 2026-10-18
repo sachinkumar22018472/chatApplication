@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { data, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from "axios"
 import { serverUrl } from '../main'
 import { useDispatch, useSelector } from 'react-redux'
@@ -37,27 +37,21 @@ function Login() {
         }
       )
 
-      dispatch(setUserData(result.data))
+      const userData = result.data.user || result.data
+      dispatch(setUserData(userData))
       dispatch(setSelectedUser(null))
-
-      alert("Login Successful")
 
       setEmail("")
       setPassword("")
       setLoading(false)
       setErr("")
 
-      navigate("/")
-
-      
+      navigate("/home")
 
     } catch (error) {
-
       console.log(error)
       setLoading(false)
-      setErr(error.response.data.message)
-
-      
+      setErr(error.response?.data?.message || "Login failed. Please check credentials.")
     }
   }
 

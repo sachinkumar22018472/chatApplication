@@ -16,9 +16,16 @@ function Profile() {
 
     let dispatch = useDispatch()
 
-    let [name, setName] = useState(userData.name || "")
-    let [frontendImage, setFrontendImage] = useState(userData.image || dp)
+    let [name, setName] = useState(userData?.name || "")
+    let [frontendImage, setFrontendImage] = useState(userData?.image || dp)
     let [backendImage, setBackendImage] = useState(null)
+
+    React.useEffect(() => {
+        if (userData) {
+            setName(userData.name || "")
+            setFrontendImage(userData.image || dp)
+        }
+    }, [userData])
 
 
     let image = useRef()
@@ -51,13 +58,14 @@ function Profile() {
         } catch (error) {
             console.log(error)
             setSaving(false)
+            alert(error?.response?.data?.message || "Failed to update profile")
         }
     }
     
   return (
     <div className='w-full min-h-screen bg-slate-200 flex flex-col justify-center items-center gap-8'>
 
-        <div className='fixed top-5 left-5 cursor-pointer' onClick={() => navigate("/")}> 
+        <div className='fixed top-5 left-5 cursor-pointer' onClick={() => navigate("/home")}> 
             <IoMdArrowRoundBack className='w-13 h-13 text-gray-600'/>
         </div>
 

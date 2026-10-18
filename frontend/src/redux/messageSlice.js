@@ -8,11 +8,16 @@ const messageSlice = createSlice({
   reducers: {
 
     setMessages: (state, action) => {
-      state.messages = action.payload;
+      state.messages = Array.isArray(action.payload) ? action.payload : [];
     },
 
     addMessage: (state, action) => {
-      state.messages.push(action.payload);
+      if (!Array.isArray(state.messages)) {
+        state.messages = [];
+      }
+      if (action.payload && !state.messages.some(m => m._id === action.payload._id)) {
+        state.messages.push(action.payload);
+      }
     }
 
   }
